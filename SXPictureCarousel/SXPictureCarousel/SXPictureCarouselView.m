@@ -188,6 +188,13 @@ static NSString *identifier = @"SXPictureCarouselCell";
     [self stopTimer];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    NSInteger pageIndex = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % self.photos.count;
+    
+    self.pageControl.currentPage = pageIndex;
+}
+
 #pragma mark collection view data source
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -222,10 +229,6 @@ static NSString *identifier = @"SXPictureCarouselCell";
 }
 
 #pragma mark collection view delegate
-
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    self.pageControl.currentPage = indexPath.item;
-}
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.delegate respondsToSelector:@selector(pictureCarouselView:didClickedItem:)]) {
