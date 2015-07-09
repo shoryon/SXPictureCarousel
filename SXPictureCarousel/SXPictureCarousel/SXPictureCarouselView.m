@@ -11,7 +11,7 @@
 
 #define RGBColor(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
 #define kPictureCarouselViewTimeInterval 3
-#define kPictureCarouselViewSections 10
+#define kPictureCarouselViewSections 100
 #define kPictureCarouselViewCurrentPageIndicatorTintColor RGBColor(213, 39, 64)
 #define kPictureCarouselViewPageIndicatorTintColor RGBColor(245, 245, 245)
 #define kPictureCarouselViewCellW self.frame.size.width
@@ -26,6 +26,7 @@
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, weak) UICollectionView *collectionView;
 @property (nonatomic, weak) UIPageControl *pageControl;
+@property (nonatomic, assign) NSInteger section;
 
 @end
 
@@ -58,8 +59,12 @@ static NSString *identifier = @"SXPictureCarouselCell";
     if (_photos) {
         self.pageControl.currentPage = 0;
         self.pageControl.numberOfPages = self.photos.count;
+        // _photos被重新设置时,需要刷新数据
         [self.collectionView reloadData];
     }
+    
+    // 如果就一张图片,则禁用图片滚动
+    self.collectionView.scrollEnabled = _photos.count > 1;
 }
 
 - (void)layoutSubviews {
@@ -143,9 +148,7 @@ static NSString *identifier = @"SXPictureCarouselCell";
     NSIndexPath *currentIndexPath = [[self.collectionView indexPathsForVisibleItems] lastObject];
     
     // 马上显示回最中间那组的数据
-    NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:kPictureCarouselViewSections * 0.5];
-    
-    [self.collectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+    NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:0];
     
     return currentIndexPathReset;
 }
@@ -155,11 +158,13 @@ static NSString *identifier = @"SXPictureCarouselCell";
  */
 - (void)autoScroll {
     
-    // 有图片才进行滚动
-    if (self.photos.count > 0) {
+    // 至少图片要多余1张才进行滚动
+    if (self.photos.count > 1) {
         
         // 1.马上显示回最中间那组的数据
         NSIndexPath *currentIndexPathReset = [self resetIndexPath];
+        
+        [self.collectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionRight animated:NO];
         
         // 2.计算出下一个需要展示的位置
         NSInteger nextItem = currentIndexPathReset.item + 1;
@@ -168,11 +173,9 @@ static NSString *identifier = @"SXPictureCarouselCell";
             nextItem = 0;
             nextSection++;
         }
-        
-        NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
-        
+
         // 3.通过动画滚动到下一个位置
-        [self.collectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:nextItem inSection:nextSection] atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
     }
 }
 

@@ -23,10 +23,10 @@
         _photos = [NSMutableArray array];
         [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
         [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
-        [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
-        [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
-        [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
-        [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
+//        [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
+//        [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
+//        [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
+//        [_photos addObject:[[SXPictureCarousel alloc] initWithRequestUrl:@"https://avatars0.githubusercontent.com/u/13197827?v=3&s=460"]];
     }
     return _photos;
 }
