@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>54128F45-F750-49C4-9459-7995F7D5FF25</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SXPictureCarousel</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>B7E995FA04093E58F9FE84928E394C7B376A651B</key>
+		<string>https://github.com/shoryon/SXPictureCarousel.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>SXPictureCarousel.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>B7E995FA04093E58F9FE84928E394C7B376A651B</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/shoryon/SXPictureCarousel.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>B7E995FA04093E58F9FE84928E394C7B376A651B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B7E995FA04093E58F9FE84928E394C7B376A651B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SXPictureCarousel</string>
+		</dict>
+	</array>
+</dict>
+</plist>
