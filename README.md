@@ -1,5 +1,5 @@
 # SXPictureCarousel
-  图片轮播视图
+# 图片轮播视图
 
 example:
 
