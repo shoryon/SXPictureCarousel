@@ -1,5 +1,7 @@
 # SXPictureCarousel
 
+example:
+
 1.在故事板的自动布局面板中拉个空白View，然后设置custom class为SXPictureCarousel，接着拖根线出来生成属性。
 
 如:  @property (weak, nonatomic) IBOutlet SXPictureCarousel *pictureCarousel;
