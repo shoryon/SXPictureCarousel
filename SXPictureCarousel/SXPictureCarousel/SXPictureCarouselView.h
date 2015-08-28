@@ -21,9 +21,9 @@
 @interface SXPictureCarouselView : UIView
 
 @property (nonatomic, strong) id package;
-
 @property (nonatomic, strong) NSArray *photos;
-
+@property (nonatomic, assign) NSTimeInterval scrollTimeInterval;
+@property (nonatomic, assign) UIEdgeInsets imageEdgeInsets;
 @property (nonatomic, assign) id<SXPictureCarouselViewDelegate> delegate;
 
 @end

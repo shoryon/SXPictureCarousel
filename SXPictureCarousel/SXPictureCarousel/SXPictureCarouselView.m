@@ -9,17 +9,13 @@
 #import "SXPictureCarouselView.h"
 #import "SXPictureCarouselViewCell.h"
 
-#define RGBColor(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
-#define kPictureCarouselViewTimeInterval 3
+#define RGBAColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
+#define kPictureCarouselViewTimeInterval 3.0
 #define kPictureCarouselViewSections 100
-#define kPictureCarouselViewCurrentPageIndicatorTintColor RGBColor(213, 39, 64)
-#define kPictureCarouselViewPageIndicatorTintColor RGBColor(245, 245, 245)
+#define kPictureCarouselViewCurrentPageIndicatorTintColor RGBAColor(255, 255, 255, 1.0)
+#define kPictureCarouselViewPageIndicatorTintColor RGBAColor(245, 245, 245, 0.8)
 #define kPictureCarouselViewCellW self.frame.size.width
 #define kPictureCarouselViewCellH self.frame.size.height
-#define kPictureCarouselViewBorderTop 0
-#define kPictureCarouselViewBorderLeft 0
-#define kPictureCarouselViewBorderRight 0
-#define kPictureCarouselViewBorderBottom 0
 
 @interface SXPictureCarouselView () <UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -38,7 +34,6 @@ static NSString *identifier = @"SXPictureCarouselCell";
     if (self = [super initWithFrame:frame]) {
         [self setupPictureCarouselView];
         [self setupPageControl];
-        [self startTimer];
     }
     return self;
 }
@@ -47,7 +42,6 @@ static NSString *identifier = @"SXPictureCarouselCell";
     if (self = [super initWithCoder:aDecoder]) {
         [self setupPictureCarouselView];
         [self setupPageControl];
-        [self startTimer];
     }
     return self;
 }
@@ -59,12 +53,14 @@ static NSString *identifier = @"SXPictureCarouselCell";
     if (_photos) {
         self.pageControl.currentPage = 0;
         self.pageControl.numberOfPages = self.photos.count;
-        // _photos被重新设置时,需要刷新数据
-        [self.collectionView reloadData];
+        [self.collectionView reloadData]; //_photos被重新设置时,需要刷新数据
     }
     
-    // 如果就一张图片,则禁用图片滚动
+    // 只有一张图片,则禁用图片滚动
     self.collectionView.scrollEnabled = _photos.count > 1;
+    
+    // 启动图片滚动定时器
+    [self startTimer];
 }
 
 - (void)layoutSubviews {
@@ -108,7 +104,7 @@ static NSString *identifier = @"SXPictureCarouselCell";
  */
 - (void)setupPageControl {
     
-    // 1.添加
+    // 1.添加分页控件
     UIPageControl *pageControl = [[UIPageControl alloc] init];
     pageControl.bounds = CGRectMake(0, 0, 100, 30);
     pageControl.userInteractionEnabled = NO;
@@ -125,10 +121,16 @@ static NSString *identifier = @"SXPictureCarouselCell";
 #pragma mark 设置图片定时滚动
 
 /**
- *  启动图片定时器
+ *  启动图片滚动定时器
  */
 - (void)startTimer {
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:kPictureCarouselViewTimeInterval target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
+    if (!self.scrollTimeInterval) { //设置默认滚动时间间隔
+        self.scrollTimeInterval = kPictureCarouselViewTimeInterval;
+    }
+    if (self.timer) { //重复设置滚动时间间隔时，需要清除之前的定时器。
+        [self stopTimer];
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:self.scrollTimeInterval target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
 }
 
 /**
@@ -164,7 +166,8 @@ static NSString *identifier = @"SXPictureCarouselCell";
         // 1.马上显示回最中间那组的数据
         NSIndexPath *currentIndexPathReset = [self resetIndexPath];
         
-        [self.collectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionRight animated:NO];
+        [self.collectionView scrollToItemAtIndexPath:currentIndexPathReset
+                                    atScrollPosition:UICollectionViewScrollPositionRight animated:NO];
         
         // 2.计算出下一个需要展示的位置
         NSInteger nextItem = currentIndexPathReset.item + 1;
@@ -173,9 +176,11 @@ static NSString *identifier = @"SXPictureCarouselCell";
             nextItem = 0;
             nextSection++;
         }
-
+        
         // 3.通过动画滚动到下一个位置
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:nextItem inSection:nextSection] atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:nextItem
+                                                                         inSection:nextSection]
+                                    atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
     }
 }
 
@@ -193,15 +198,18 @@ static NSString *identifier = @"SXPictureCarouselCell";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    NSInteger pageIndex = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % self.photos.count;
-    
-    self.pageControl.currentPage = pageIndex;
+    if (self.photos) {
+        
+        NSInteger pageIndex = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % self.photos.count;
+        
+        self.pageControl.currentPage = pageIndex;
+    }
 }
 
 #pragma mark collection view data source
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-
+    
     return self.photos.count;
 }
 
@@ -212,8 +220,8 @@ static NSString *identifier = @"SXPictureCarouselCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    SXPictureCarouselViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    
+    SXPictureCarouselViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier
+                                                                                forIndexPath:indexPath];
     cell.pictureCarousel = self.photos[indexPath.item];
     
     return cell;
@@ -227,8 +235,14 @@ static NSString *identifier = @"SXPictureCarouselCell";
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    
-    return UIEdgeInsetsMake(kPictureCarouselViewBorderTop, kPictureCarouselViewBorderLeft, kPictureCarouselViewBorderBottom, kPictureCarouselViewBorderRight);
+    if (self.imageEdgeInsets.top &&
+        self.imageEdgeInsets.left &&
+        self.imageEdgeInsets.right &&
+        self.imageEdgeInsets.bottom) {
+        return UIEdgeInsetsZero;
+    } else {
+        return self.imageEdgeInsets;
+    }
 }
 
 #pragma mark collection view delegate

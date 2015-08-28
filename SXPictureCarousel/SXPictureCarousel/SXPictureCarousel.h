@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, SXPictureCarouselRequestType){
 @property (nonatomic, copy) NSString *titleName;
 @property (nonatomic, copy) NSString *imageName;
 @property (nonatomic, copy) NSString *requestUrl;
+@property (nonatomic, copy) NSString *openUrl;
 @property (nonatomic, assign) SXPictureCarouselRequestType requestType;
 
 - (instancetype)initWithImageName:(NSString *)imageName;
@@ -41,5 +42,7 @@ typedef NS_ENUM(NSInteger, SXPictureCarouselRequestType){
 + (instancetype)initWithTitleName:(NSString *)titleName imageName:(NSString *)imageName;
 - (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl;
 + (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl;
+- (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl openUrl:(NSString *)openUrl;
++ (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl openUrl:(NSString *)openUrl;
 
 @end

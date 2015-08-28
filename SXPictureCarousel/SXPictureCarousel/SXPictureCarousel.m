@@ -40,16 +40,25 @@
 }
 
 - (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl {
+    return [self initWithTitleName:titleName requestUrl:requestUrl openUrl:nil];
+}
+
++ (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl {
+    return [[self alloc] initWithTitleName:titleName requestUrl:requestUrl openUrl:nil];
+}
+
+- (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl openUrl:(NSString *)openUrl {
     if (self = [super init]) {
         self.titleName = titleName;
         self.requestUrl = requestUrl;
         self.requestType = SXPictureCarouselRequestTypeUrl;
+        self.openUrl = openUrl;
     }
     return self;
 }
 
-+ (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl {
-    return [[self alloc] initWithTitleName:titleName requestUrl:requestUrl];
++ (instancetype)initWithTitleName:(NSString *)titleName requestUrl:(NSString *)requestUrl openUrl:(NSString *)openUrl {
+    return [[self alloc] initWithTitleName:titleName requestUrl:requestUrl openUrl:openUrl];
 }
 
 @end
